@@ -112,7 +112,7 @@ func MainApp(stack awscdk.Stack) {
 
 func RegisterTable(stack awscdk.Stack) DynamoDBTable {
 	tableRestaurant := awsdynamodb.NewTable(stack, utils.JsiiWithEnv("table_restaurant"), &awsdynamodb.TableProps{
-		TableName: jsii.String(utils.NameWithEnv("main_app_restaurant")),
+		TableName: jsii.String(utils.NameWithEnv("restaurants")),
 		PartitionKey: &awsdynamodb.Attribute{
 			Name: jsii.String("id"),
 			Type: awsdynamodb.AttributeType_STRING,
