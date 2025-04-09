@@ -29,4 +29,4 @@ jobs:
       - name: Install CDK
         run: npm install -g aws-cdk
       - name: Deploy CDK Stack
-        run: cdk deploy stgMainAppStack --require-approval never
+        run: cdk deploy stgCdkStack --require-approval never
