@@ -6,7 +6,7 @@ import (
 )
 
 type IRepository interface {
-	GetRestaurants(ctx context.Context) ([]entities.Restaurant, error)
+	GetAllRestaurants(ctx context.Context) ([]entities.Restaurant, error)
 }
 
 type usecase struct {
@@ -14,7 +14,7 @@ type usecase struct {
 }
 
 func (u usecase) GetRestaurants(ctx context.Context) ([]entities.Restaurant, error) {
-	restaurant, err := u.repo.GetRestaurants(ctx)
+	restaurant, err := u.repo.GetAllRestaurants(ctx)
 	if err != nil {
 		return []entities.Restaurant{}, err
 	}
