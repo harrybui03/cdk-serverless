@@ -1,0 +1,123 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  mainapp
+Globals:
+  Function:
+    Timeout: 5
+    MemorySize: 128
+    Tracing: Active
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    TracingEnabled: true
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+Resources:
+  CreateRestaurant:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      Timeout: 20
+      CodeUri: cmd/createrestaurant
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Policies: AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        CreateRestaurantAPI:
+          Type: Api
+          Properties:
+            Path: /restaurants
+            Method: POST
+      Environment:
+        Variables:
+          ENVIRONMENT: development
+
+  DeleteRestaurant:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: cmd/deleterestaurant
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Policies: AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        DeleteRestaurantAPI:
+          Type: Api
+          Properties:
+            Path: /restaurants/{id}
+            Method: DELETE
+      Environment:
+        Variables:
+          ENVIRONMENT: development
+
+  GetRestaurant:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: cmd/getrestaurant
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Policies: AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        GetRestaurantsAPI:
+          Type: Api
+          Properties:
+            Path: /restaurants
+            Method: GET
+      Environment:
+        Variables:
+          ENVIRONMENT: development
+
+  GetRestaurantById:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: cmd/getrestaurantbyid
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Policies: AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        GetRestaurantByIdAPI:
+          Type: Api
+          Properties:
+            Path: /restaurants/{id}
+            Method: GET
+      Environment:
+        Variables:
+          ENVIRONMENT: development
+
+  UpdateRestaurant:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: cmd/updaterestaurant
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Policies: AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        UpdateRestaurantAPI:
+          Type: Api
+          Properties:
+            Path: /restaurants/{id}
+            Method: PUT
+      Environment:
+        Variables:
+          ENVIRONMENT: development

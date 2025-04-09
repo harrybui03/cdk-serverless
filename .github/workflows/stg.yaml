@@ -1,0 +1,33 @@
+name: Deploy Stating Restful API
+on: workflow_dispatch
+env:
+  ENVIRONMENT: stg
+
+jobs:
+  deploy:
+    environment: stg
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - uses: actions/setup-go@5
+        with:
+          go-version: '^1.23'
+      - name: Install AWS CLI
+        run: sudo apt-get install -y awscli
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credential@v3
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-access-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ap-southeast-2
+      - name: Install CDK
+        run: npm install -g aws-cdk
+      - name: Deploy CDK Stack
+        run: cdk deploy stgMainAppStack --require-approval never
