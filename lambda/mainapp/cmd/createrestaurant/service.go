@@ -3,6 +3,7 @@ package main
 import (
 	"cdk/lambda/mainapp/entities"
 	"context"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -17,6 +18,7 @@ type usecase struct {
 func (u usecase) CreateRestaurant(ctx context.Context, input CreateRestaurantDTO) error {
 	now := time.Now().Unix()
 	restaurantEntity := entities.Restaurant{
+		Id:                   uuid.New().String(),
 		Name:                 input.Name,
 		Address:              input.Address,
 		CuisineType:          input.CuisineType,

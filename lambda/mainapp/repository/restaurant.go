@@ -49,24 +49,27 @@ func (r Repository) UpsertRestaurant(ctx context.Context, restaurant entities.Re
 	return nil
 }
 
-func (r Repository) GetRestaurants(ctx context.Context) ([]entities.Restaurant, error) {
-	log.Info().Str("table", utils.NameWithEnv("restaurants")).Msg("Get Restaurants")
-	input := &dynamodb.QueryInput{
+func (r Repository) GetAllRestaurants(ctx context.Context) ([]entities.Restaurant, error) {
+	log.Info().Str("table", utils.NameWithEnv("restaurants")).Msg("Scanning Restaurants")
+	input := &dynamodb.ScanInput{
 		TableName: aws.String(utils.NameWithEnv("restaurants")),
 	}
 
-	result, err := r.Db.QueryWithContext(ctx, input)
+	result, err := r.Db.ScanWithContext(ctx, input)
 	if err != nil {
+		log.Error().Err(err).Msg("Error scanning restaurants table")
 		return []entities.Restaurant{}, err
 	}
 
-	var restaurant []entities.Restaurant
-	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &restaurant)
+	var restaurants []entities.Restaurant
+	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &restaurants)
 	if err != nil {
+		log.Error().Err(err).Msg("Error unmarshalling scanned restaurant items")
 		return []entities.Restaurant{}, err
 	}
 
-	return restaurant, nil
+	log.Info().Int("count", len(restaurants)).Msg("Successfully scanned restaurants")
+	return restaurants, nil
 }
 
 func (r Repository) GetRestaurantByID(ctx context.Context, id string) (entities.Restaurant, error) {
