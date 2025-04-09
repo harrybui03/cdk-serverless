@@ -20,14 +20,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '^1.20' # Recommended to use a more recent stable version
-      - name: Set AWS Access Key ID as environment variable
-        run: |
-          echo "AWS Access Key ID (masked in logs): ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "Setting AWS_ACCESS_ID environment variable"
-          echo "AWS_ACCESS_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> "$GITHUB_ENV"
-      - name: Verify AWS Access Key ID environment variable
-        run: |
-          echo "The AWS Access Key ID environment variable is: $AWS_ACCESS_ID" # Value will be masked in logs
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
