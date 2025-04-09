@@ -1,4 +1,4 @@
-name: Deploy Stating Restful API
+name: Deploy Staging Restful API
 on: workflow_dispatch
 env:
   ENVIRONMENT: stg
@@ -16,14 +16,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - uses: actions/setup-go@v5.4.0
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          go-version: '^1.23'
+          go-version: '^1.20' # Recommended to use a more recent stable version
+      - name: Set AWS Access Key ID as environment variable
+        run: |
+          echo "AWS Access Key ID (masked in logs): ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "Setting AWS_ACCESS_ID environment variable"
+          echo "AWS_ACCESS_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> "$GITHUB_ENV"
+      - name: Verify AWS Access Key ID environment variable
+        run: |
+          echo "The AWS Access Key ID environment variable is: $AWS_ACCESS_ID" # Value will be masked in logs
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-access-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-2
       - name: Install CDK
         run: npm install -g aws-cdk
