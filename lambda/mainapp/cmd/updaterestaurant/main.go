@@ -17,7 +17,7 @@ func init() {
 }
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	id := request.PathParameters["restaurantId"]
+	id := request.PathParameters["id"]
 
 	var input UpdateRestaurantDTO
 	if err := utils.Bind(request, &input); err != nil {
