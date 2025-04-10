@@ -27,7 +27,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	if err != nil {
 		return utils.ErrorResponse(app.NewInternalError(err, err.Error())), nil
 	}
-	return utils.SuccessResponse("Get restaurant successfully", restaurants), nil
+	return utils.SuccessResponse("Get restaurants successfully", restaurants), nil
 }
 
 func main() {

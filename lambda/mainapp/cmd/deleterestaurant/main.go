@@ -29,7 +29,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return utils.ErrorResponse(app.NewInternalError(err, err.Error())), nil
 	}
 
-	return utils.SimpleSuccessResponse("Create restaurant successfully"), nil
+	return utils.SimpleSuccessResponse("Delete restaurant successfully"), nil
 }
 
 func main() {
